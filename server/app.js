@@ -7,6 +7,7 @@ const Auth = require('./middleware/auth');
 const models = require('./models');
 const parseCookies = require('./middleware/cookieParser');
 
+
 const app = express();
 
 app.set('views', `${__dirname}/views`);
@@ -88,45 +89,13 @@ app.post('/links',
 /************************************************************/
 
 app.post('/login', (req, res) => {
-  let username = {
-    "username": req.body.username
-  }  
-  let attempted = req.body.password
-  let hashed = ''
-  let salt = ''
-  let userid;
-
-  models.Users.get(username)
-    .then((resolve, reject) => {
-      if(reject) {
-        console.log(reject)
-        res.redirect('/login')
-      } else {
-      //   hashed = resolve.password
-      //   salt = resolve.salt
-      //   userid = resolve.id
-
-      //   let authentic = models.Users.compare(attempted, hashed, salt)
-      //   console.log('Are they authentic: ', authentic)
-      //   if(authentic === true) {
-      //     models.Sessions.create();
-      //     res.redirect('/')
-      //   } else {
-      //     res.redirect('/login')
-      //   }
-      // }
-    })
-    .catch(error => {
-      console.log('error is: ', error)
-      res.redirect('/login')
-    })
+  Auth.authenticate(req, res, ()=>{})
 })
 
 app.post('/signup', (req, res) => {
   models.Users.create(req.body)
     .then((resolve, reject) => {
       if (reject) {
-        console.log('error1', reject);
         res.redirect('/signup');
       } else {
         res.redirect('/');
@@ -134,7 +103,6 @@ app.post('/signup', (req, res) => {
     })
     .catch(
       (err) => {
-        console.log('error2', err);
         res.redirect('/signup');
       }
     );
