@@ -1,16 +1,20 @@
+
+
 const parseCookies = (req, res, next) => {
-  let cookieSplit = req.header.cookies.split(';');
-  let cookiesAgain = [];
   let cookie = {}
+  if(req.headers.cookie !== undefined) {
+    
+    let cookieSplit = req.headers.cookie.split('; ');
+    let cookiesAgain = [];
+    
 
-  for(let i = 0; i < cookieSplit.length; i++) {
-    cookiesAgain.push(cookieSplit[i].split('='));
-    cookie[cookiesAgain[i][0]] = cookiesAgain[i][1]
+    for(let i = 0; i < cookieSplit.length; i++) {
+      cookiesAgain.push(cookieSplit[i].split('='));
+      cookie[cookiesAgain[i][0]] = cookiesAgain[i][1]
+    }
+    req.cookies = cookie
   }
-
-  
-
-
+  next();
 };
 
 module.exports = parseCookies;

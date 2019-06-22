@@ -5,6 +5,7 @@ const partials = require('express-partials');
 const bodyParser = require('body-parser');
 const Auth = require('./middleware/auth');
 const models = require('./models');
+const parseCookies = require('./middleware/cookieParser');
 
 const app = express();
 
@@ -99,22 +100,26 @@ app.post('/login', (req, res) => {
     .then((resolve, reject) => {
       if(reject) {
         console.log(reject)
+        res.redirect('/login')
       } else {
-        hashed = resolve.password
-        salt = resolve.salt
-        userid = resolve.id
+      //   hashed = resolve.password
+      //   salt = resolve.salt
+      //   userid = resolve.id
 
-        let authentic = models.Users.compare(attempted, hashed, salt)
-        console.log('Are they authentic: ', authentic)
-        if(authentic === true) {
-          models.Sessions.create();
-        }
-      }
+      //   let authentic = models.Users.compare(attempted, hashed, salt)
+      //   console.log('Are they authentic: ', authentic)
+      //   if(authentic === true) {
+      //     models.Sessions.create();
+      //     res.redirect('/')
+      //   } else {
+      //     res.redirect('/login')
+      //   }
+      // }
     })
     .catch(error => {
       console.log('error is: ', error)
+      res.redirect('/login')
     })
-  res.send()
 })
 
 app.post('/signup', (req, res) => {
@@ -122,15 +127,15 @@ app.post('/signup', (req, res) => {
     .then((resolve, reject) => {
       if (reject) {
         console.log('error1', reject);
-        res.send();
+        res.redirect('/signup');
       } else {
-        res.send(resolve);
+        res.redirect('/');
       }
     })
     .catch(
       (err) => {
         console.log('error2', err);
-        res.send();
+        res.redirect('/signup');
       }
     );
 });
