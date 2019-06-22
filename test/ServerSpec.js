@@ -5,7 +5,7 @@ var httpMocks = require('node-mocks-http');
 
 var app = require('../server/app.js');
 var schema = require('../server/db/config.js');
-var port = 4568;
+var port = 4500;
 
 /************************************************************/
 // Mocha doesn't have a way to designate pending before blocks.
